@@ -35,9 +35,10 @@ PanningEffect::PanningEffect(const PanningEffectSettings& settings)
     reset();
 }
 
+const Vector3f initialDirection = Vector3f(NAN, NAN, NAN);
 void PanningEffect::reset()
 {
-    mPrevDirection = Vector3f::kZero;
+	mPrevDirection = initialDirection;
 }
 
 AudioEffectState PanningEffect::apply(const PanningEffectParams& params,
@@ -47,6 +48,10 @@ AudioEffectState PanningEffect::apply(const PanningEffectParams& params,
     assert(in.numSamples() == out.numSamples());
     assert(in.numChannels() == 1);
     assert(out.numChannels() == mSpeakerLayout.numSpeakers);
+
+	// Use provided direction if we don't have a previous direction
+	if (mPrevDirection == initialDirection)
+		mPrevDirection = *params.direction;
 
     PanningData panningData{};
     PanningData prevPanningData{};

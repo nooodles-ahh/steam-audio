@@ -1386,8 +1386,6 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
     {
-        updateOverallGain(state, sourceCoordinates, listenerCoordinates);
-
         auto samplingRate = 0;
         auto frameSize = 0u;
         state->functions->getsamplerate(state, &samplingRate);
@@ -1422,6 +1420,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
             effect->newSimulationSourceWritten = false;
         }
+
+        updateOverallGain(state, sourceCoordinates, listenerCoordinates);
 
         auto sourcePosition = sourceCoordinates.origin;
         auto direction = iplCalculateRelativeDirection(gContext, sourcePosition, listenerCoordinates.origin, listenerCoordinates.ahead, listenerCoordinates.up);
